@@ -15,8 +15,17 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Grant permission
-        run: chmod +x gradlew
+      - name: Setup Gradle Wrapper
+        run: |
+          mkdir -p gradle/wrapper
+          curl -L "https://services.gradle.org/distributions/gradle-8.1.1-bin.zip" -o gradle-8.1.1-bin.zip
+          unzip -p gradle-8.1.1-bin.zip "gradle-8.1.1/lib/gradle-launcher-8.1.1.jar" > gradle/wrapper/gradle-wrapper.jar
+          cat > gradlew << 'EOF'
+          #!/usr/bin/env sh
+          APP_HOME=$(pwd)
+          exec java -classpath "$APP_HOME/gradle/wrapper/gradle-wrapper.jar" org.gradle.wrapper.GradleWrapperMain "$@"
+          EOF
+          chmod +x gradlew
 
       - name: Build APK
         run: ./gradlew assembleDebug
