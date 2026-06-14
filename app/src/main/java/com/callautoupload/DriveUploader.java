@@ -4,12 +4,13 @@ import android.content.Context;
 import android.util.Log;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.FileList;
 import com.google.api.client.http.FileContent;
 import java.util.Collections;
 
@@ -33,7 +34,7 @@ public class DriveUploader {
                 credential.setSelectedAccount(account.getAccount());
 
                 Drive drive = new Drive.Builder(
-                    AndroidHttp.newCompatibleTransport(),
+                    new NetHttpTransport(),
                     new GsonFactory(),
                     credential)
                     .setApplicationName("CallAutoUpload")
@@ -61,7 +62,7 @@ public class DriveUploader {
     private static String getOrCreateFolder(Drive drive) {
         try {
             String q = "mimeType='application/vnd.google-apps.folder' and name='CallRecordings' and trashed=false";
-            var result = drive.files().list().setQ(q).setFields("files(id)").execute();
+            FileList result = drive.files().list().setQ(q).setFields("files(id)").execute();
             if (!result.getFiles().isEmpty())
                 return result.getFiles().get(0).getId();
 
