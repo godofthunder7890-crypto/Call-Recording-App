@@ -24,15 +24,14 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
-
-        <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:scheme="android_secret_code" android:host="1234"/>
             </intent-filter>
         </activity>
+
+        <activity android:name=".DriveSignInActivity" android:exported="false"/>
 
         <receiver android:name=".CallReceiver" android:exported="true">
             <intent-filter android:priority="999">
